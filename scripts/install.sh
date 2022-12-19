@@ -6,7 +6,7 @@ echo
 echo "Checking your system ..."
 
 # /usr/bin/zsh -> zsh
-login_shell=$(echo "$SHELL" | rev | cut -d'/' -f1 | rev)
+login_shell=$(basename $SHELL .exe)
 
 if [ "$login_shell" != bash ] && [ "$login_shell" != zsh ]; then
     echo "ERROR: Unsupported/unknown login shell: $login_shell"
@@ -75,6 +75,10 @@ if [ "$(uname)" = Darwin ]; then
         echo "   $ brew install coreutils"
         echo
         exit 1
+    fi
+elif [ -n "$MSYSTEM" ]; then
+    if nohup --version >/dev/null 2>&1; then
+        echo " * Nohup installed: OK"
     fi
 else
     if setsid --version >/dev/null 2>&1; then

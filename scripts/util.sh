@@ -53,6 +53,11 @@ __resh_run_daemon() {
     if [ "$(uname)" = Darwin ]; then
         # hotfix
         gnohup resh-daemon >| "$fpath_last_run" 2>&1 & disown
+    elif [ -n "$MSYSTEM" ]; then
+        # nohup is available in minimal Git Bash shell based on msys2
+        nohup resh-daemon >| "$fpath_last_run" 2>&1 & disown
+        # TODO: This could potentially work on all platforms?
+        # resh-daemon </dev/null &>"$fpath_last_run" & disown $!
     else
         # TODO: switch to nohup for consistency once you confirm that daemon is
         #       not getting killed anymore on macOS
